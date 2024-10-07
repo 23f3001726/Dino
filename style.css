@@ -58,3 +58,27 @@ body {
     background-color: #FFD700; /* Yellow color for Bird */
     border-radius: 50%; /* Make it circular */
 }
+
+/* Add these styles to style.css */
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#start-btn {
+    background-color: #4CAF50; /* Green color for Start */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#stop-btn {
+    background-color: #F44336; /* Red color for Stop */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
