@@ -1,10 +1,14 @@
 let dino = document.getElementById('dino');
-let cactus = document.getElementById('cactus');
 let scoreDisplay = document.getElementById('score');
 let jumpSound = document.getElementById('jump-sound');
 let landSound = document.getElementById('land-sound');
 let score = 0;
 let isJumping = false;
+
+// Obstacle generation parameters
+let obstacleInterval = 2000; // Initial interval in milliseconds
+let obstacleSpeed = 2; // Initial speed
+let obstacleCounter = 0;
 
 // Jump function
 function jump() {
@@ -20,27 +24,92 @@ function jump() {
     }, 600); // Jump duration
 }
 
+// Create a cactus obstacle
+function createCactus() {
+    const cactus = document.createElement('div');
+    cactus.classList.add('cactus');
+    cactus.style.right = '-40px'; // Start off-screen
+    document.querySelector('.game-container').appendChild(cactus);
+
+    // Move cactus across the screen
+    const interval = setInterval(() => {
+        cactus.style.right = (parseInt(cactus.style.right) + obstacleSpeed) + 'px';
+
+        if (parseInt(cactus.style.right) > 600) {
+            clearInterval(interval);
+            cactus.remove();
+            score++;
+            scoreDisplay.textContent = 'Score: ' + score;
+        }
+
+        detectCollision(cactus, interval);
+    }, 100);
+}
+
+// Create a bird obstacle
+function createBird() {
+    const bird = document.createElement('div');
+    bird.classList.add('bird');
+    bird.style.right = '-40px'; // Start off-screen
+    document.querySelector('.game-container').appendChild(bird);
+
+    // Move bird across the screen
+    const interval = setInterval(() => {
+        bird.style.right = (parseInt(bird.style.right) + obstacleSpeed) + 'px';
+
+        if (parseInt(bird.style.right) > 600) {
+            clearInterval(interval);
+            bird.remove();
+            score++;
+            scoreDisplay.textContent = 'Score: ' + score;
+        }
+
+        detectCollision(bird, interval);
+    }, 100);
+}
+
 // Collision detection
-function detectCollision() {
+function detectCollision(obstacle, interval) {
     const dinoRect = dino.getBoundingClientRect();
-    const cactusRect = cactus.getBoundingClientRect();
+    const obstacleRect = obstacle.getBoundingClientRect();
 
     if (
-        dinoRect.x < cactusRect.x + cactusRect.width &&
-        dinoRect.x + dinoRect.width > cactusRect.x &&
-        dinoRect.y < cactusRect.y + cactusRect.height &&
-        dinoRect.height + dinoRect.y > cactusRect.y
+        dinoRect.x < obstacleRect.x + obstacleRect.width &&
+        dinoRect.x + dinoRect.width > obstacleRect.x &&
+        dinoRect.y < obstacleRect.y + obstacleRect.height &&
+        dinoRect.height + dinoRect.y > obstacleRect.y
     ) {
         alert('Game Over! Your score: ' + score);
         score = 0; // Reset score
-    } else {
-        score++;
-        scoreDisplay.textContent = 'Score: ' + score;
+        clearInterval(interval);
+        window.location.reload(); // Reload the game
     }
 }
 
 // Keydown event listener
 document.addEventListener('keydown', jump);
 
-// Update the game every 100ms
-setInterval(detectCollision, 100);
+// Generate obstacles at intervals
+setInterval(() => {
+    obstacleCounter++;
+    if (obstacleCounter % 5 === 0) {
+        createBird(); // Create a bird every 5 obstacles
+    } else {
+        createCactus(); // Create a cactus otherwise
+    }
+
+    // Gradually increase speed every 10 points
+    if (score % 10 === 0 && score > 0) {
+        obstacleSpeed += 0.5; // Increase speed
+        obstacleInterval -= 100; // Decrease interval time
+        clearInterval(obstacleGenerationInterval); // Clear the existing interval
+        obstacleGenerationInterval = setInterval(() => {
+            obstacleCounter++;
+            if (obstacleCounter % 5 === 0) {
+                createBird();
+            } else {
+                createCactus();
+            }
+        }, obstacleInterval);
+    }
+}, obstacleInterval);
