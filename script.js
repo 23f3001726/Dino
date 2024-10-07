@@ -2,13 +2,14 @@ let dino = document.getElementById('dino');
 let scoreDisplay = document.getElementById('score');
 let jumpSound = document.getElementById('jump-sound');
 let landSound = document.getElementById('land-sound');
+let startBtn = document.getElementById('start-btn');
+let stopBtn = document.getElementById('stop-btn');
 let score = 0;
 let isJumping = false;
-
-// Obstacle generation parameters
-let obstacleInterval = 2000; // Initial interval in milliseconds
-let obstacleSpeed = 2; // Initial speed
+let obstacleInterval;
+let obstacleSpeed = 2;
 let obstacleCounter = 0;
+let gameInterval;
 
 // Jump function
 function jump() {
@@ -79,37 +80,4 @@ function detectCollision(obstacle, interval) {
         dinoRect.y < obstacleRect.y + obstacleRect.height &&
         dinoRect.height + dinoRect.y > obstacleRect.y
     ) {
-        alert('Game Over! Your score: ' + score);
-        score = 0; // Reset score
-        clearInterval(interval);
-        window.location.reload(); // Reload the game
-    }
-}
-
-// Keydown event listener
-document.addEventListener('keydown', jump);
-
-// Generate obstacles at intervals
-setInterval(() => {
-    obstacleCounter++;
-    if (obstacleCounter % 5 === 0) {
-        createBird(); // Create a bird every 5 obstacles
-    } else {
-        createCactus(); // Create a cactus otherwise
-    }
-
-    // Gradually increase speed every 10 points
-    if (score % 10 === 0 && score > 0) {
-        obstacleSpeed += 0.5; // Increase speed
-        obstacleInterval -= 100; // Decrease interval time
-        clearInterval(obstacleGenerationInterval); // Clear the existing interval
-        obstacleGenerationInterval = setInterval(() => {
-            obstacleCounter++;
-            if (obstacleCounter % 5 === 0) {
-                createBird();
-            } else {
-                createCactus();
-            }
-        }, obstacleInterval);
-    }
-}, obstacleInterval);
+        alert
