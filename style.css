@@ -1,0 +1,50 @@
+body {
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    position: relative;
+    width: 600px;
+    height: 150px;
+    border: 2px solid #333;
+    overflow: hidden;
+    background-color: #e0e0e0;
+}
+
+.dino {
+    position: absolute;
+    bottom: 20px;
+    left: 50px;
+    width: 40px;
+    height: 40px;
+    background-color: #4CAF50; /* Green color for Dino */
+    border-radius: 5px;
+}
+
+.cactus {
+    position: absolute;
+    bottom: 20px;
+    right: -40px;
+    width: 20px;
+    height: 40px;
+    background-color: #D32F2F; /* Red color for Cactus */
+    animation: move 2s linear infinite;
+}
+
+@keyframes move {
+    0% { right: -40px; }
+    100% { right: 600px; }
+}
+
+.score {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+}
